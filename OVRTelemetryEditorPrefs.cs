@@ -15,9 +15,10 @@ using UnityEditor;
 
 public class OVRTelemetryEditorPrefs : EditorWindow
 {
-    public int intValue = 0;
-    public string keyValue = "OVRTelemetry.TelemetryEnabled";
-    public string link = "https://docs.unity3d.com/ScriptReference/EditorPrefs.SetInt.html";
+    private int intValue = 0;
+    private string keyValueDefault = "OVRTelemetry.TelemetryEnabled";
+    private string keyValue = "OVRTelemetry.TelemetryEnabled";
+    private string link = "https://docs.unity3d.com/ScriptReference/EditorPrefs.SetInt.html";
 
     [MenuItem("EditorPrefs/OVRTelemetry TelemetryEnabled")]
     static void Init()
@@ -40,9 +41,10 @@ public class OVRTelemetryEditorPrefs : EditorWindow
 
         EditorGUILayout.LabelField("Current stored Key");
         keyValue = EditorGUILayout.TextField("Key to write to Prefs: ", keyValue);
+        if(string.IsNullOrEmpty(keyValue)) keyValue = keyValueDefault;
 
         int temp;
-        temp = EditorPrefs.GetInt(key, -1);
+        temp = EditorPrefs.GetInt(keyValue, -1);
 
         EditorGUILayout.LabelField("Found stored value: " + temp.ToString());
         intValue = EditorGUILayout.IntField("Value to write to Prefs: ", intValue);
@@ -60,7 +62,7 @@ public class OVRTelemetryEditorPrefs : EditorWindow
         if (GUILayout.Button("Delete Key: " + keyValue))
         {
             EditorPrefs.DeleteKey(keyValue);
-            temp = EditorPrefs.GetInt(key, -1);
+            temp = EditorPrefs.GetInt(keyValue, -1);
 
             Debug.Log(keyValue + " Found: " + temp);
         }
